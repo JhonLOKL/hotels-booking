@@ -23,7 +23,6 @@ chrome_options = Options()
 prefs = {"profile.default_content_setting_values.notifications": 2}
 chrome_options.add_experimental_option("prefs", prefs)
 chrome_options.headless = False
-
 driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
 
 # Set the zone
@@ -43,27 +42,27 @@ except:
     
 # Load all cards    
 
-#last_height = driver.execute_script("return document.body.scrollHeight")
+last_height = driver.execute_script("return document.body.scrollHeight")
 
-#while True:
-#    driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-#    sleep(2)  
-#    new_height = driver.execute_script("return document.body.scrollHeight")
-#    if new_height == last_height:
-#        break
-#    last_height = new_height
+while True:
+    driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+    sleep(2)  
+    new_height = driver.execute_script("return document.body.scrollHeight")
+    if new_height == last_height:
+        break
+    last_height = new_height
     
     
-#while True:
-#    try:
-#        button = WebDriverWait(driver, 10).until(
-#            EC.presence_of_element_located((By.XPATH, "//button[span[text()='Cargar más resultados']]"))
-#        )
-#        button.click()
-#        sleep(1.5)
-#    except TimeoutException:
-#        print("The button with the text 'Load more results' is no longer present on the page or could not be loaded.")
-#        break
+while True:
+    try:
+        button = WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.XPATH, "//button[span[text()='Cargar más resultados']]"))
+        )
+        button.click()
+        sleep(1.5)
+    except TimeoutException:
+        print("The button with the text 'Load more results' is no longer present on the page or could not be loaded.")
+        break
     
 # Dataframes
 

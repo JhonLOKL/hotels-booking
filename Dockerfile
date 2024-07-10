@@ -1,31 +1,42 @@
-# Usa una imagen base de Python
-FROM python:3.11-slim
+# Usa una imagen base oficial de Python
+FROM python:3.9-slim
 
-# Instala las dependencias necesarias
-RUN apt-get update && \
-    apt-get install -y wget gnupg unzip && \
-    wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | apt-key add - && \
-    sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list' && \
+# Instala dependencias necesarias
+RUN apt-get update && apt-get install -y \
+    curl \
+    unzip \
+    gnupg \
+    --no-install-recommends && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+# Instala Google Chrome
+RUN curl -sSL https://dl.google.com/linux/linux_signing_key.pub | apt-key add - && \
+    echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list && \
     apt-get update && \
     apt-get install -y google-chrome-stable && \
-    apt-get clean
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
 # Instala ChromeDriver
-RUN wget -O /tmp/chromedriver.zip https://chromedriver.storage.googleapis.com/114.0.5735.90/chromedriver_linux64.zip && \
-    unzip /tmp/chromedriver.zip chromedriver -d /usr/local/bin/ && \
-    rm /tmp/chromedriver.zip
+RUN CHROME_DRIVER_VERSION=$(curl -sS chromedriver.storage.googleapis.com/LATEST_RELEASE) && \
+    wget -N http://chromedriver.storage.googleapis.com/$CHROME_DRIVER_VERSION/chromedriver_linux64.zip && \
+    unzip chromedriver_linux64.zip && \
+    mv chromedriver /usr/local/bin/chromedriver && \
+    rm chromedriver_linux64.zip
 
-# Crea y activa un entorno virtual
-RUN python -m venv /opt/venv
-ENV PATH="/opt/venv/bin:$PATH"
+# Establece el directorio de trabajo en /app
+WORKDIR /app
 
-# Copia los archivos de requerimientos y los instala
+# Copia los archivos necesarios
 COPY requirements.txt .
-RUN pip install --upgrade pip && \
-    pip install -r requirements.txt
 
-# Copia el resto de la aplicación
+# Instala las dependencias de Python
+RUN pip install --no-cache-dir -r requirements.txt
+
 COPY . .
+# Establece variables de entorno para Chrome
+ENV DISPLAY=:99
 
-# Establece el comando de inicio
-CMD ["gunicorn", "-w", "4", "-b", "0.0.0.0:8000", "app:app"]
+# Ejecuta la aplicación
+CMD ["python", "app.py"]
