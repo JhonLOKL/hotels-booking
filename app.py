@@ -10,13 +10,18 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
 import pandas as pd
 
-from src.services.save_bedrooms import SaveBedrooms
+from src.services.dummies_api import bedrooms_dummies_request, hotels_dummies_request
+from src.services.save_bedrooms import SaveBedrooms, SaveBedroomsPrices
 from src.services.save_hotels import SaveHotels
-from src.functions.bedrooms_functions import GetBedrooms
+from src.functions.bedrooms_functions import GetBedrooms, GetPricesBedrooms
 from src.functions.categories_functions import Categories
 from src.functions.features_functions import Feature
 from src.functions.number_functions import ExtractNumber
 
+behavior = 3 
+# 1 for bedrooms and hotels,
+# 2 for only bedrooms prices
+# 3 for all
 
 # Configure Chrome options
 chrome_options = Options()
@@ -107,6 +112,16 @@ column_names = [
 
 bedrooms_df = pd.DataFrame(columns=column_names)
 
+column_names = [
+"date",
+"future_date",
+"title_hotel",
+"title_room",
+"price_room",
+]
+
+bedroomsPrices_df = pd.DataFrame(columns=column_names)
+    
 total_hotels = 0
     
 def Scraping(hotel_links):
@@ -225,6 +240,41 @@ def Scraping(hotel_links):
         sleep(1)
         j += 1
 
+def PricesScraping(hotel_links):
+    global bedroomsPrices_df
+    errors = []
+    j = 1            
+    for link in hotel_links:
+        try:
+            link_element = WebDriverWait(driver, 10).until(EC.element_to_be_clickable(link))
+            link_element.click()
+        except Exception as e:
+            errors.append(f"<-> Error clicking the link: {e}") 
+            continue
+            
+        try:
+            WebDriverWait(driver, 30).until(EC.number_of_windows_to_be(2))
+        except Exception as e:
+            errors.append(f"<-> New window did not open: {e}") 
+            continue
+        
+        sleep(1.5)
+        
+        driver.switch_to.window(driver.window_handles[1])
+        
+        sleep(1.5)
+        
+        #Title  
+        try:
+            hotel_title = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, "//h2[contains(@class, 'pp-header__title')]"))).text
+        except:
+            errors.append("<-> There is not title for this hotel.") 
+            
+        #Bedrooms    
+        bedroomsPrices = GetPricesBedrooms(driver, hotel_title.strip())
+        bedroomsPrices_df = pd.concat([bedroomsPrices_df, bedroomsPrices["bedroomsPrices_df"]  ], ignore_index=True)
+        errors.extend(bedroomsPrices["errors"])
+    
 def ExtractLinks():
     WebDriverWait(driver, 30).until(EC.element_to_be_clickable((By.XPATH, "//div[@data-testid='property-card']")))
     return driver.find_elements(By.XPATH, "//div[@data-testid='property-card']")
@@ -238,7 +288,8 @@ try:
         
         hotel_links_page = ExtractLinks()
         total_hotels = len(hotel_links_page)
-        Scraping(hotel_links_page)
+        if behavior == 1:
+            Scraping(hotel_links_page)
         sleep(5)
         
         print("Scraped page!")
@@ -254,11 +305,26 @@ except Exception  as e:
     hotel_links_page = ExtractLinks()
     total_hotels = len(hotel_links_page)
     sleep(5)
-    Scraping(hotel_links_page)   
+    if behavior == 1:
+        Scraping(hotel_links_page)
+    elif behavior == 2:
+        PricesScraping(hotel_links_page)
+    elif behavior == 3:
+        Scraping(hotel_links_page)
     print("Scraped page!")   
     print("Done! v2") 
 
-SaveHotels(hotels_df)
-SaveBedrooms(bedrooms_df)
-
+if behavior == 1:
+    SaveHotels(hotels_df)
+    SaveBedrooms(bedrooms_df)
+    hotels_dummies_request()
+    bedrooms_dummies_request()
+elif behavior == 2:
+    SaveBedroomsPrices(bedroomsPrices_df)
+elif behavior == 3:
+    SaveHotels(hotels_df)
+    SaveBedrooms(bedrooms_df)
+    SaveBedroomsPrices(bedrooms_df[['date', 'future_date', 'title_hotel', 'title_room', 'price_room']])
+    hotels_dummies_request()
+    bedrooms_dummies_request()
 driver.quit()

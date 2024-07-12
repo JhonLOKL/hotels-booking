@@ -6,6 +6,22 @@ RUN apt-get update && apt-get install -y \
     curl \
     unzip \
     gnupg \
+    fonts-liberation \
+    libappindicator3-1 \
+    libasound2 \
+    libatk-bridge2.0-0 \
+    libatk1.0-0 \
+    libcups2 \
+    libdbus-1-3 \
+    libxcomposite1 \
+    libxdamage1 \
+    libxrandr2 \
+    libgbm1 \
+    libgtk-3-0 \
+    libnspr4 \
+    libnss3 \
+    lsb-release \
+    xdg-utils \
     --no-install-recommends && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
@@ -28,13 +44,15 @@ RUN CHROME_DRIVER_VERSION=$(curl -sS chromedriver.storage.googleapis.com/LATEST_
 # Establece el directorio de trabajo en /app
 WORKDIR /app
 
-# Copia los archivos necesarios
+# Copia el archivo de requerimientos y las dependencias
 COPY requirements.txt .
 
 # Instala las dependencias de Python
 RUN pip install --no-cache-dir -r requirements.txt
 
+# Copia todo el contenido del proyecto al directorio de trabajo
 COPY . .
+
 # Establece variables de entorno para Chrome
 ENV DISPLAY=:99
 
