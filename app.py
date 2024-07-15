@@ -18,7 +18,7 @@ from src.functions.categories_functions import Categories
 from src.functions.features_functions import Feature
 from src.functions.number_functions import ExtractNumber
 
-behavior = 3 
+behavior = 2 
 # 1 for bedrooms and hotels,
 # 2 for only bedrooms prices
 # 3 for all
@@ -33,8 +33,8 @@ driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), opti
 # Set the zone
 today = datetime.today()
 
-future_date1 = today + timedelta(days=30)
-future_date2 = today + timedelta(days=31)
+future_date1 = today + timedelta(days=1)
+future_date2 = today + timedelta(days=2)
 
 driver.get(f'https://www.booking.com/searchresults.es.html?ss=Medellín&ssne=Medellín&ssne_untouched=Medellín&efdco=1&label=gx-co-booking-booking-sd-pdsc&sid=3cb16c5170054bb6fc3437f5fe21f904&aid=348858&lang=es&sb=1&src_elem=sb&src=searchresults&dest_id=-592318&dest_type=city&checkin={future_date1.year}-{future_date1.month}-{future_date1.day}&checkout={future_date2.year}-{future_date2.month}-{future_date2.day}&ltfd=5%3A1%3A12-2024_2-2025%3A%3A&group_adults=2&no_rooms=1&group_children=0&sb_travel_purpose=leisure')
 
@@ -274,7 +274,17 @@ def PricesScraping(hotel_links):
         bedroomsPrices = GetPricesBedrooms(driver, hotel_title.strip())
         bedroomsPrices_df = pd.concat([bedroomsPrices_df, bedroomsPrices["bedroomsPrices_df"]  ], ignore_index=True)
         errors.extend(bedroomsPrices["errors"])
-    
+        
+        print( f"{j} of {total_hotels} ---------------------------------------")
+        print("Hotel", hotel_title)
+        
+        #End 
+        driver.close()
+        sleep(1)
+        driver.switch_to.window(driver.window_handles[0])
+        sleep(1)
+        j += 1
+        
 def ExtractLinks():
     WebDriverWait(driver, 30).until(EC.element_to_be_clickable((By.XPATH, "//div[@data-testid='property-card']")))
     return driver.find_elements(By.XPATH, "//div[@data-testid='property-card']")
