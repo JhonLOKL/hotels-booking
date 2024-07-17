@@ -5,9 +5,7 @@ import pandas as pd
 from selenium.webdriver.common.by import By
 from src.functions.number_functions import ExtractNumber
 
-def GetBedrooms(driver, title_hotel):
-    today = datetime.today()
-    future_date1 = today + timedelta(days=30)
+def GetBedrooms(driver, title_hotel, future_date1):
     column_names = [
     "date",
     "future_date",
@@ -153,9 +151,7 @@ def GetBedrooms(driver, title_hotel):
         
     return { "i": i,"bedrooms_df" : bedrooms_df, "errors":errors}
 
-def GetPricesBedrooms(driver, title_hotel):
-    today = datetime.today()
-    future_date1 = today + timedelta(days=30)
+def GetPricesBedrooms(driver, title_hotel, future_date1):
     column_names = [
     "date",
     "future_date",
