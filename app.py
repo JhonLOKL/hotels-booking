@@ -72,6 +72,7 @@ def CircleScraping(thread, behavior, startDay, finishDay ):
         "date",
         "future_date",
         "hotel_title",
+        "hotel_coordinates",
         "hotel_address",
         "neighborhood",
         "hotel_puntuation",
@@ -167,6 +168,12 @@ def CircleScraping(thread, behavior, startDay, finishDay ):
                 hotel_address = driver.find_element(By.XPATH, '//*[@id="showMap2"]/span[1]').text
             except:
                 errors.append("<-> There is not address for this hotel.") 
+            #Coordinates    
+            try:
+                element = driver.find_element(By.XPATH, "//a[@data-atlas-latlng]")
+                hotel_coordinates = element.get_attribute("data-atlas-latlng")
+            except:
+                errors.append("<-> There is not coordinates for this hotel.") 
             #Servicios
             services = []    
             try:
@@ -189,7 +196,7 @@ def CircleScraping(thread, behavior, startDay, finishDay ):
                 errors.append("<-> Error in services") 
                 
             #Bedrooms    
-            bedrooms = GetBedrooms(driver, hotel_title.strip(), future_date1)
+            bedrooms = GetBedro8888888888888888888888888888888888888888888888888888888888888888888888QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ[[[[[[[[oms(driver, hotel_title.strip(), future_date1)
             bedrooms_df = pd.concat([bedrooms_df, bedrooms["bedrooms_df"]  ], ignore_index=True)
             errors.extend(bedrooms["errors"])
             
@@ -210,6 +217,7 @@ def CircleScraping(thread, behavior, startDay, finishDay ):
                 "date": current_date.strftime('%d/%m/%Y'),
                 "future_date" : future_date1.strftime('%d/%m/%Y'),
                 "hotel_title" : hotel_title.strip(),
+                "hotel_coordinates" : hotel_coordinates,
                 "hotel_address" : hotel_address,
                 "neighborhood" : neighborhood,
                 "hotel_puntuation" : hotel_puntuation.replace("Puntuación:", "").strip(),
@@ -315,51 +323,52 @@ def CircleScraping(thread, behavior, startDay, finishDay ):
         sleep(5)
         if behavior == 1:
             Scraping(hotel_links_page)
-            print(f"{hotels_df} hotels added and {bedroomsPrices_df} bedrooms added.")
+            print(f"{len(hotels_df)} hotels added and {len(bedrooms_df)} bedrooms added.")
         elif behavior == 2:
             PricesScraping(hotel_links_page)
-            print(f"{bedroomsPrices_df} bedrooms prices add.")
+            print(f"{len(bedroomsPrices_df)} bedrooms prices add.")
         elif behavior == 3:
             Scraping(hotel_links_page)
-            print(f"{hotels_df} hotels added and {bedroomsPrices_df} bedrooms added.")
+            print(f"{len(hotels_df)} hotels added and {len(bedrooms_df)} bedrooms added.")
         print("Scraped page!")   
         print("Done! v2") 
 
     if behavior == 1:
         SaveHotels(hotels_df)
         SaveBedrooms(bedrooms_df)
-        hotels_dummies_request()
-        bedrooms_dummies_request()
+        #hotels_dummies_request()
+        #bedrooms_dummies_request()
     elif behavior == 2:
         SaveBedroomsPrices(bedroomsPrices_df)
     elif behavior == 3:
         SaveHotels(hotels_df)
         SaveBedrooms(bedrooms_df)
         SaveBedroomsPrices(bedrooms_df[['date', 'future_date', 'title_hotel', 'title_room', 'price_room']])
-        hotels_dummies_request()
-        bedrooms_dummies_request()
+        #hotels_dummies_request()
+        #bedrooms_dummies_request()
     driver.quit()
 
 # CircleScraping( thread, behavior, startDay, FinishDay)
 # 1 for bedrooms and hotels,
 # 2 for only bedrooms prices
 # 3 for all
-thread1 = threading.Thread(target=lambda: CircleScraping(1, 2, 1, 2))
+CircleScraping(1, 3, 30, 31)
+""" thread1 = threading.Thread(target=lambda: CircleScraping(1, 2, 1, 2))
 thread2 = threading.Thread(target=lambda: CircleScraping(2, 2, 2, 3))
 thread3 = threading.Thread(target=lambda: CircleScraping(3, 2, 3, 4))
 thread4 = threading.Thread(target=lambda: CircleScraping(4, 2, 4, 5))
-thread5 = threading.Thread(target=lambda: CircleScraping(5, 2, 5, 6))
+thread5 = threading.Thread(target=lambda: CircleScraping(5, 2, 5, 6)) """
 
 # Start the threads
-thread1.start()
+""" thread1.start()
 thread2.start()
 thread3.start()
 thread4.start()
-thread5.start()
+thread5.start() """
 
 # Wait for the threads to complete
-thread1.join()
+""" thread1.join()
 thread2.join()
 thread3.join()
 thread4.join()
-thread5.join()
+thread5.join() """
