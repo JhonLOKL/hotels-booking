@@ -196,7 +196,7 @@ def CircleScraping(thread, behavior, startDay, finishDay ):
                 errors.append("<-> Error in services") 
                 
             #Bedrooms    
-            bedrooms = GetBedro8888888888888888888888888888888888888888888888888888888888888888888888QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ[[[[[[[[oms(driver, hotel_title.strip(), future_date1)
+            bedrooms = GetBedrooms(driver, hotel_title.strip(), future_date1)
             bedrooms_df = pd.concat([bedrooms_df, bedrooms["bedrooms_df"]  ], ignore_index=True)
             errors.extend(bedrooms["errors"])
             
