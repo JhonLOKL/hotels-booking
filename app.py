@@ -10,7 +10,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
 import pandas as pd
-
+import re
 from src.services.dummies_api import bedrooms_dummies_request, hotels_dummies_request
 from src.services.save_bedrooms import SaveBedrooms, SaveBedroomsPrices
 from src.services.save_hotels import SaveHotels
@@ -25,6 +25,12 @@ chrome_options = Options()
 prefs = {"profile.default_content_setting_values.notifications": 2}
 chrome_options.add_experimental_option("prefs", prefs)
 chrome_options.headless = False
+
+def ExtractSixDigitNumber(text):
+    match = re.search(r'\d{6}', text)
+    if match:
+        return match.group(0)
+    return None
 
 def CircleScraping(thread, behavior, startDay, finishDay ):
     # Set the zone
@@ -75,6 +81,7 @@ def CircleScraping(thread, behavior, startDay, finishDay ):
         "hotel_coordinates",
         "hotel_address",
         "neighborhood",
+        "codigo_postal",
         "hotel_puntuation",
         "hotel_reviews",
         "services",
@@ -220,6 +227,7 @@ def CircleScraping(thread, behavior, startDay, finishDay ):
                 "hotel_coordinates" : hotel_coordinates,
                 "hotel_address" : hotel_address,
                 "neighborhood" : neighborhood,
+                "codigo_postal" : ExtractSixDigitNumber(hotel_address),
                 "hotel_puntuation" : hotel_puntuation.replace("Puntuación:", "").strip(),
                 "hotel_reviews" : ExtractNumber(hotel_reviews),
                 "services" : list(set(services)),
@@ -352,23 +360,20 @@ def CircleScraping(thread, behavior, startDay, finishDay ):
 # 1 for bedrooms and hotels,
 # 2 for only bedrooms prices
 # 3 for all
-CircleScraping(1, 3, 30, 31)
-""" thread1 = threading.Thread(target=lambda: CircleScraping(1, 2, 1, 2))
+thread1 = threading.Thread(target=lambda: CircleScraping(1, 2, 1, 2))
 thread2 = threading.Thread(target=lambda: CircleScraping(2, 2, 2, 3))
 thread3 = threading.Thread(target=lambda: CircleScraping(3, 2, 3, 4))
 thread4 = threading.Thread(target=lambda: CircleScraping(4, 2, 4, 5))
-thread5 = threading.Thread(target=lambda: CircleScraping(5, 2, 5, 6)) """
-
-# Start the threads
-""" thread1.start()
+thread5 = threading.Thread(target=lambda: CircleScraping(5, 2, 5, 6)) 
+#Start the threads
+thread1.start()
 thread2.start()
 thread3.start()
 thread4.start()
-thread5.start() """
-
+thread5.start() 
 # Wait for the threads to complete
-""" thread1.join()
+thread1.join()
 thread2.join()
 thread3.join()
 thread4.join()
-thread5.join() """
+thread5.join() 
