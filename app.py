@@ -360,20 +360,88 @@ def CircleScraping(thread, behavior, startDay, finishDay ):
 # 1 for bedrooms and hotels,
 # 2 for only bedrooms prices
 # 3 for all
-thread1 = threading.Thread(target=lambda: CircleScraping(1, 2, 1, 2))
-thread2 = threading.Thread(target=lambda: CircleScraping(2, 2, 2, 3))
-thread3 = threading.Thread(target=lambda: CircleScraping(3, 2, 3, 4))
-thread4 = threading.Thread(target=lambda: CircleScraping(4, 2, 4, 5))
-thread5 = threading.Thread(target=lambda: CircleScraping(5, 2, 5, 6)) 
-#Start the threads
-thread1.start()
-thread2.start()
-thread3.start()
-thread4.start()
-thread5.start() 
-# Wait for the threads to complete
-thread1.join()
-thread2.join()
-thread3.join()
-thread4.join()
-thread5.join() 
+def start_threads(params):
+    threads = []
+    for param in params:
+        thread = threading.Thread(target=lambda p=param: CircleScraping(*p))
+        threads.append(thread)
+        thread.start()
+    
+    for thread in threads:
+        thread.join()
+
+
+#params1 = [
+#    (1, 2, 1, 2),
+#    (2, 2, 2, 3),
+#    (3, 2, 3, 4),
+#    (4, 2, 4, 5),
+#    (5, 2, 5, 6)
+#]
+
+""" params2 = [
+    (1, 2, 6, 7),
+    (2, 2, 7, 8),
+    (3, 2, 8, 9),
+    (4, 2, 9, 10),
+    (5, 2, 10, 11)
+]
+
+params3 = [
+    (1, 2, 11, 12),
+    (2, 2, 12, 13),
+    (3, 2, 13, 14),
+    (4, 2, 14, 15),
+    (5, 2, 15, 16)
+]
+params4 = [
+    (1, 2, 16, 17),
+    (2, 2, 17, 18),
+    (3, 2, 18, 19),
+    (4, 2, 19, 20),
+    (5, 2, 20, 21)
+] """
+
+params5 = [
+    (1, 2, 21, 22),
+    (2, 2, 22, 23),
+    (3, 2, 23, 24),
+    (4, 2, 24, 25),
+    (5, 2, 25, 26)
+]
+
+params6 = [
+    (1, 2, 26, 27),
+    (2, 2, 27, 28),
+    (3, 2, 28, 29),
+    (4, 2, 29, 30),
+    (5, 2, 30, 31)
+]
+
+params7 = [
+    (1, 2, 31, 32),
+    (2, 2, 32, 33),
+    (3, 2, 33, 34),
+    (4, 2, 34, 35),
+    (5, 2, 35, 36)
+]
+
+params8 = [
+    (1, 2, 36, 37),
+    (2, 2, 37, 38),
+    (3, 2, 38, 39),
+    (4, 2, 39, 40),
+    (5, 2, 40, 41)
+]
+
+# Ejecutar primer grupo de hilos
+#start_threads(params1)
+
+# Ejecutar segundo grupo de hilos después de que el primero haya terminado
+""" start_threads(params2)
+start_threads(params3)
+start_threads(params4) """
+start_threads(params5)
+start_threads(params6)
+start_threads(params7)
+start_threads(params8)
