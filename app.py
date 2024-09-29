@@ -39,7 +39,12 @@ def CircleScraping(thread, behavior, startDay, finishDay ):
     future_date1 = today + timedelta(days=startDay)
     future_date2 = today + timedelta(days=finishDay)
     driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
+    #Medellin
     driver.get(f'https://www.booking.com/searchresults.es.html?ss=Medellín&ssne=Medellín&ssne_untouched=Medellín&efdco=1&label=gx-co-booking-booking-sd-pdsc&sid=3cb16c5170054bb6fc3437f5fe21f904&aid=348858&lang=es&sb=1&src_elem=sb&src=searchresults&dest_id=-592318&dest_type=city&checkin={future_date1.year}-{future_date1.month}-{future_date1.day}&checkout={future_date2.year}-{future_date2.month}-{future_date2.day}&ltfd=5%3A1%3A12-2024_2-2025%3A%3A&group_adults=2&no_rooms=1&group_children=0&sb_travel_purpose=leisure')
+    #Santa Marta
+    #driver.get(f'https://www.booking.com/searchresults.es.html?ss=Santa+Marta%2C+Magdalena%2C+Colombia&ssne=Medellín&ssne_untouched=Medellín&label=gx-co-booking-booking-sd-pdsc&sid=3cb16c5170054bb6fc3437f5fe21f904&aid=348858&lang=es&sb=1&src_elem=sb&src=searchresults&dest_id=-598739&dest_type=city&ac_position=0&ac_click_type=b&ac_langcode=es&ac_suggestion_list_length=5&search_selected=true&search_pageview_id=f95752af0d1f002d&ac_meta=GhAzY2NiNTJiNDQ5ZDUwM2FkIAAoATICZXM6C3NhbnRhIG1hcnRhQABKAFAA&checkin=2024-08-17&checkout=2024-08-18&ltfd=5%3A1%3A12-2024_2-2025%3A%3A&group_adults=2&no_rooms=1&group_children=0&sb_travel_purpose=leisure')
+    #Guatape
+    #driver.get(f'https://www.booking.com/searchresults.es.html?ss=Guatapé&ssne=Guatapé&ssne_untouched=Guatapé&efdco=1&label=guatape-ZG62mnR7d8txayaxVvMoMQS379602288477%3Apl%3Ata%3Ap1%3Ap2%3Aac%3Aap%3Aneg%3Afi%3Atikwd-377345041594%3Alp1003654%3Ali%3Adec%3Adm%3Appccp%3DUmFuZG9tSVYkc2RlIyh9YfpWGnRw6lOGZNq08ntPlxk&aid=1610688&lang=es&sb=1&src_elem=sb&src=city&dest_id=-585862&dest_type=city&checkin={future_date1.year}-{future_date1.month}-{future_date1.day}&checkout={future_date2.year}-{future_date2.month}-{future_date2.day}&group_adults=2&no_rooms=1&group_children=0&sb_travel_purpose=leisure&sb_lp=1')
 
     # Button validation
     try:
@@ -123,6 +128,7 @@ def CircleScraping(thread, behavior, startDay, finishDay ):
     "title_hotel",
     "title_room",
     "price_room",
+    "quantity_room"
     ]
 
     bedroomsPrices_df = pd.DataFrame(columns=column_names)
@@ -136,6 +142,7 @@ def CircleScraping(thread, behavior, startDay, finishDay ):
         for link in hotel_links:
             errors = []
             #Puntuation
+            hotel_puntuation = ""
             try:
                 hotel_puntuation = link.find_element(By.XPATH, ".//div[contains(text(), 'Puntuaci')]").text
             except Exception  as e:
@@ -371,15 +378,15 @@ def start_threads(params):
         thread.join()
 
 
-#params1 = [
-#    (1, 2, 1, 2),
-#    (2, 2, 2, 3),
-#    (3, 2, 3, 4),
-#    (4, 2, 4, 5),
-#    (5, 2, 5, 6)
-#]
+params1 = [
+    (1, 2, 1, 2),
+    (2, 2, 2, 3),
+    (3, 2, 3, 4),
+    (4, 2, 4, 5),
+    (5, 2, 5, 6)
+]
 
-""" params2 = [
+params2 = [
     (1, 2, 6, 7),
     (2, 2, 7, 8),
     (3, 2, 8, 9),
@@ -400,7 +407,7 @@ params4 = [
     (3, 2, 18, 19),
     (4, 2, 19, 20),
     (5, 2, 20, 21)
-] """
+] 
 
 params5 = [
     (1, 2, 21, 22),
@@ -438,10 +445,15 @@ params8 = [
 #start_threads(params1)
 
 # Ejecutar segundo grupo de hilos después de que el primero haya terminado
-""" start_threads(params2)
+#CircleScraping(0,1,1,2)
+#CircleScraping(0,1,8,9)
+start_threads(params1)
+start_threads(params2)
 start_threads(params3)
-start_threads(params4) """
+start_threads(params4) 
 start_threads(params5)
 start_threads(params6)
 start_threads(params7)
-start_threads(params8)
+start_threads(params8) 
+
+#CircleScraping(1, 3, 9, 10)

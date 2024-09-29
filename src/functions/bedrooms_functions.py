@@ -4,6 +4,7 @@ from datetime import datetime, timedelta
 import pandas as pd
 from selenium.webdriver.common.by import By
 from src.functions.number_functions import ExtractNumber
+from selenium.webdriver.support.ui import Select
 
 def GetBedrooms(driver, title_hotel, future_date1):
     column_names = [
@@ -158,6 +159,7 @@ def GetPricesBedrooms(driver, title_hotel, future_date1):
     "title_hotel",
     "title_room",
     "price_room",
+    "quantity_room"
     ]
 
     bedroomsPrices_df = pd.DataFrame(columns=column_names)
@@ -180,6 +182,15 @@ def GetPricesBedrooms(driver, title_hotel, future_date1):
                 
             price_room =tr.find_element(By.XPATH, ".//span[contains(text(), 'COP')]").text
             
+            try:
+                select_element = tr.find_element(By.TAG_NAME, 'select')
+                select = Select(select_element)
+
+                max_value = max([int(option.get_attribute('value')) for option in select.options])
+                select.select_by_value(str(max_value))
+            except:
+                print("Error in quantity room")
+                
             current_date = datetime.now()
             
             i += 1
@@ -189,6 +200,7 @@ def GetPricesBedrooms(driver, title_hotel, future_date1):
                 "title_hotel" : title_hotel,
                 "title_room" : title_room,
                 "price_room" : ExtractNumber(price_room.replace(".", "")),
+                "quantity_room" : max_value
                 }
 
             bedroomsPrices_df.loc[len(bedroomsPrices_df)] = new_row
