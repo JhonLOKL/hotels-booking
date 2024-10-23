@@ -18,7 +18,7 @@ from src.functions.bedrooms_functions import GetBedrooms, GetPricesBedrooms
 from src.functions.categories_functions import Categories
 from src.functions.features_functions import Feature
 from src.functions.number_functions import ExtractNumber
-
+from selenium import webdriver
 
 # Configure Chrome options
 chrome_options = Options()
@@ -32,19 +32,23 @@ def ExtractSixDigitNumber(text):
         return match.group(0)
     return None
 
-def CircleScraping(thread, behavior, startDay, finishDay ):
+def CircleScraping(thread, behavior, startDay, finishDay, url):
     # Set the zone
     today = datetime.today()
 
     future_date1 = today + timedelta(days=startDay)
     future_date2 = today + timedelta(days=finishDay)
-    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
-    #Medellin
-    driver.get(f'https://www.booking.com/searchresults.es.html?ss=Medellín&ssne=Medellín&ssne_untouched=Medellín&efdco=1&label=gx-co-booking-booking-sd-pdsc&sid=3cb16c5170054bb6fc3437f5fe21f904&aid=348858&lang=es&sb=1&src_elem=sb&src=searchresults&dest_id=-592318&dest_type=city&checkin={future_date1.year}-{future_date1.month}-{future_date1.day}&checkout={future_date2.year}-{future_date2.month}-{future_date2.day}&ltfd=5%3A1%3A12-2024_2-2025%3A%3A&group_adults=2&no_rooms=1&group_children=0&sb_travel_purpose=leisure')
-    #Santa Marta
-    #driver.get(f'https://www.booking.com/searchresults.es.html?ss=Santa+Marta%2C+Magdalena%2C+Colombia&ssne=Medellín&ssne_untouched=Medellín&label=gx-co-booking-booking-sd-pdsc&sid=3cb16c5170054bb6fc3437f5fe21f904&aid=348858&lang=es&sb=1&src_elem=sb&src=searchresults&dest_id=-598739&dest_type=city&ac_position=0&ac_click_type=b&ac_langcode=es&ac_suggestion_list_length=5&search_selected=true&search_pageview_id=f95752af0d1f002d&ac_meta=GhAzY2NiNTJiNDQ5ZDUwM2FkIAAoATICZXM6C3NhbnRhIG1hcnRhQABKAFAA&checkin=2024-08-17&checkout=2024-08-18&ltfd=5%3A1%3A12-2024_2-2025%3A%3A&group_adults=2&no_rooms=1&group_children=0&sb_travel_purpose=leisure')
-    #Guatape
-    #driver.get(f'https://www.booking.com/searchresults.es.html?ss=Guatapé&ssne=Guatapé&ssne_untouched=Guatapé&efdco=1&label=guatape-ZG62mnR7d8txayaxVvMoMQS379602288477%3Apl%3Ata%3Ap1%3Ap2%3Aac%3Aap%3Aneg%3Afi%3Atikwd-377345041594%3Alp1003654%3Ali%3Adec%3Adm%3Appccp%3DUmFuZG9tSVYkc2RlIyh9YfpWGnRw6lOGZNq08ntPlxk&aid=1610688&lang=es&sb=1&src_elem=sb&src=city&dest_id=-585862&dest_type=city&checkin={future_date1.year}-{future_date1.month}-{future_date1.day}&checkout={future_date2.year}-{future_date2.month}-{future_date2.day}&group_adults=2&no_rooms=1&group_children=0&sb_travel_purpose=leisure&sb_lp=1')
+    driver = webdriver.Chrome()
+
+    if (url == 1):
+        #Medellin   
+        driver.get(f'https://www.booking.com/searchresults.es.html?ss=Medellín&ssne=Medellín&ssne_untouched=Medellín&efdco=1&label=gx-co-booking-booking-sd-pdsc&sid=3cb16c5170054bb6fc3437f5fe21f904&aid=348858&lang=es&sb=1&src_elem=sb&src=searchresults&dest_id=-592318&dest_type=city&checkin={future_date1.year}-{future_date1.month}-{future_date1.day}&checkout={future_date2.year}-{future_date2.month}-{future_date2.day}&ltfd=5%3A1%3A12-2024_2-2025%3A%3A&group_adults=2&no_rooms=1&group_children=0&sb_travel_purpose=leisure')
+    elif (url == 2):
+        #Santa Marta
+        driver.get(f'https://www.booking.com/searchresults.es.html?ss=Santa+Marta%2C+Magdalena%2C+Colombia&ssne=Medellín&ssne_untouched=Medellín&label=gx-co-booking-booking-sd-pdsc&sid=3cb16c5170054bb6fc3437f5fe21f904&aid=348858&lang=es&sb=1&src_elem=sb&src=searchresults&dest_id=-598739&dest_type=city&ac_position=0&ac_click_type=b&ac_langcode=es&ac_suggestion_list_length=5&search_selected=true&search_pageview_id=f95752af0d1f002d&ac_meta=GhAzY2NiNTJiNDQ5ZDUwM2FkIAAoATICZXM6C3NhbnRhIG1hcnRhQABKAFAA&checkin=2024-08-17&checkout=2024-08-18&ltfd=5%3A1%3A12-2024_2-2025%3A%3A&group_adults=2&no_rooms=1&group_children=0&sb_travel_purpose=leisure')
+    elif (url == 3):
+        #Guatape
+        driver.get(f'https://www.booking.com/searchresults.es.html?ss=Guatapé&ssne=Guatapé&ssne_untouched=Guatapé&efdco=1&label=guatape-ZG62mnR7d8txayaxVvMoMQS379602288477%3Apl%3Ata%3Ap1%3Ap2%3Aac%3Aap%3Aneg%3Afi%3Atikwd-377345041594%3Alp1003654%3Ali%3Adec%3Adm%3Appccp%3DUmFuZG9tSVYkc2RlIyh9YfpWGnRw6lOGZNq08ntPlxk&aid=1610688&lang=es&sb=1&src_elem=sb&src=city&dest_id=-585862&dest_type=city&checkin={future_date1.year}-{future_date1.month}-{future_date1.day}&checkout={future_date2.year}-{future_date2.month}-{future_date2.day}&group_adults=2&no_rooms=1&group_children=0&sb_travel_purpose=leisure&sb_lp=1')
 
     # Button validation
     try:
@@ -55,7 +59,7 @@ def CircleScraping(thread, behavior, startDay, finishDay ):
         
     # Load all cards    
 
-    last_height = driver.execute_script("return document.body.scrollHeight")
+    """ last_height = driver.execute_script("return document.body.scrollHeight")
 
     while True:
         driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
@@ -75,7 +79,7 @@ def CircleScraping(thread, behavior, startDay, finishDay ):
             sleep(1.5)
         except TimeoutException:
             print("The button with the text 'Load more results' is no longer present on the page or could not be loaded.")
-            break
+            break """
         
     # Dataframes
 
@@ -148,6 +152,7 @@ def CircleScraping(thread, behavior, startDay, finishDay ):
             except Exception  as e:
                 errors.append("<-> Error in puntuation")
             #Reviews
+            hotel_reviews = ""
             try:
                 hotel_reviews = link.find_element(By.XPATH, ".//div[contains(text(), 'comentarios')]").text
             except Exception  as e:
@@ -225,7 +230,10 @@ def CircleScraping(thread, behavior, startDay, finishDay ):
             
             current_date = datetime.now()
             address_parts = hotel_address.split(",")
-            neighborhood = address_parts[1].strip()
+            try:
+                neighborhood = address_parts[1].strip()
+            except:
+                neighborhood = ""
 
             new_row = {
                 "date": current_date.strftime('%d/%m/%Y'),
@@ -236,7 +244,7 @@ def CircleScraping(thread, behavior, startDay, finishDay ):
                 "neighborhood" : neighborhood,
                 "codigo_postal" : ExtractSixDigitNumber(hotel_address),
                 "hotel_puntuation" : hotel_puntuation.replace("Puntuación:", "").strip(),
-                "hotel_reviews" : ExtractNumber(hotel_reviews),
+                "hotel_reviews" : ExtractNumber(hotel_reviews) if hotel_reviews else None,
                 "services" : list(set(services)),
                 "staff" : categories['staff'],
                 "installations_services" : categories['installations_services'],
@@ -272,7 +280,7 @@ def CircleScraping(thread, behavior, startDay, finishDay ):
             except Exception as e:
                 errors.append(f"<-> Error clicking the link: {e}") 
                 continue
-                
+
             try:
                 WebDriverWait(driver, 30).until(EC.number_of_windows_to_be(2))
             except Exception as e:
@@ -283,8 +291,17 @@ def CircleScraping(thread, behavior, startDay, finishDay ):
             
             driver.switch_to.window(driver.window_handles[1])
             
-            sleep(1.5)
+            sleep(2)
             
+            #Delete button svg
+            try:
+                sleep(2)
+                button = driver.find_element(By.XPATH, "//button[@class='a83ed08757 c21c56c305 f38b6daa18 d691166b09 ab98298258 f4552b6561']")
+
+                button.click()
+            except Exception as e:
+                print(f"Hubo un error al intentar hacer clic en el botón")
+                            
             #Title  
             try:
                 hotel_title = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, "//h2[contains(@class, 'pp-header__title')]"))).text
@@ -307,7 +324,9 @@ def CircleScraping(thread, behavior, startDay, finishDay ):
             j += 1
             
     def ExtractLinks():
-        WebDriverWait(driver, 30).until(EC.element_to_be_clickable((By.XPATH, "//div[@data-testid='property-card']")))
+        #WebDriverWait(driver, 30).until(EC.element_to_be_clickable((By.XPATH, "//div[@data-testid='property-card']")))
+        #WebDriverWait(driver, 30).until(EC.element_to_be_clickable((By.XPATH, "//div[@data-testid='title']")))
+        WebDriverWait(driver, 30).until(EC.element_to_be_clickable((By.XPATH, "//a[@data-testid='availability-cta-btn']")))
         return driver.find_elements(By.XPATH, "//div[@data-testid='property-card']")
 
     try:
@@ -363,7 +382,7 @@ def CircleScraping(thread, behavior, startDay, finishDay ):
         #bedrooms_dummies_request()
     driver.quit()
 
-# CircleScraping( thread, behavior, startDay, FinishDay)
+# CircleScraping( thread, behavior, startDay, finishDay, url)
 # 1 for bedrooms and hotels,
 # 2 for only bedrooms prices
 # 3 for all
@@ -377,83 +396,40 @@ def start_threads(params):
     for thread in threads:
         thread.join()
 
-
-params1 = [
-    (1, 2, 1, 2),
-    (2, 2, 2, 3),
-    (3, 2, 3, 4),
-    (4, 2, 4, 5),
-    (5, 2, 5, 6)
-]
-
-params2 = [
-    (1, 2, 6, 7),
-    (2, 2, 7, 8),
-    (3, 2, 8, 9),
-    (4, 2, 9, 10),
-    (5, 2, 10, 11)
-]
-
-params3 = [
-    (1, 2, 11, 12),
-    (2, 2, 12, 13),
-    (3, 2, 13, 14),
-    (4, 2, 14, 15),
-    (5, 2, 15, 16)
-]
-params4 = [
-    (1, 2, 16, 17),
-    (2, 2, 17, 18),
-    (3, 2, 18, 19),
-    (4, 2, 19, 20),
-    (5, 2, 20, 21)
-] 
-
-params5 = [
-    (1, 2, 21, 22),
-    (2, 2, 22, 23),
-    (3, 2, 23, 24),
-    (4, 2, 24, 25),
-    (5, 2, 25, 26)
-]
-
-params6 = [
-    (1, 2, 26, 27),
-    (2, 2, 27, 28),
-    (3, 2, 28, 29),
-    (4, 2, 29, 30),
-    (5, 2, 30, 31)
-]
-
-params7 = [
-    (1, 2, 31, 32),
-    (2, 2, 32, 33),
-    (3, 2, 33, 34),
-    (4, 2, 34, 35),
-    (5, 2, 35, 36)
-]
-
-params8 = [
-    (1, 2, 36, 37),
-    (2, 2, 37, 38),
-    (3, 2, 38, 39),
-    (4, 2, 39, 40),
-    (5, 2, 40, 41)
-]
-
 # Ejecutar primer grupo de hilos
 #start_threads(params1)
 
 # Ejecutar segundo grupo de hilos después de que el primero haya terminado
 #CircleScraping(0,1,1,2)
-#CircleScraping(0,1,8,9)
-start_threads(params1)
-start_threads(params2)
-start_threads(params3)
-start_threads(params4) 
-start_threads(params5)
-start_threads(params6)
-start_threads(params7)
-start_threads(params8) 
+#CircleScraping(1, 3, 1, 2)
+start_threads([
+    (1, 3, 14, 15, 1),
+    (2, 3, 14, 15, 2),
+    (3, 3, 14, 15, 3),])
 
-#CircleScraping(1, 3, 9, 10)
+while True:
+    try:
+        start_threads([
+            (1, 3, 3, 4, 1),
+            (2, 3, 3, 4, 2),
+            (3, 3, 3, 4, 3),
+            (4, 3, 29, 30, 1),
+            (5, 3, 29, 30, 2),
+            (6, 3, 29, 30, 3)
+        ])
+        for i in range(3):
+            x = 0
+            for j in range(6):
+                start_threads([
+                    (1, 2, (0 + x), (1 + x), (1 + i)),
+                    (1, 2, (1 + x), (2 + x), (1 + i)),
+                    (2, 2, (2 + x), (3 + x), (1 + i)),
+                    (3, 2, (3 + x), (4 + x), (1 + i)),
+                    (4, 2, (4 + x), (5 + x), (1 + i)),
+                    (5, 2, (5 + x), (6 + x), (1 + i)),
+                ])
+                x += 6
+
+    except Exception as e:
+        print(f"Ocurrió un error: {e}")
+        print("Reiniciando...")
