@@ -410,7 +410,7 @@ start_threads([
     (2, 3, 14, 15, 2),
     (3, 3, 14, 15, 3),])
 
-""" while True:
+while True:
     try:
         start_threads([
             (1, 3, 3, 4, 1),
@@ -435,4 +435,4 @@ start_threads([
 
     except Exception as e:
         print(f"Ocurrió un error: {e}")
-        print("Reiniciando...") """
+        print("Reiniciando...")
