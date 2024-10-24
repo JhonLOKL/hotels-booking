@@ -1,6 +1,7 @@
 import threading
 from time import sleep
 from datetime import datetime, timedelta
+import numpy as np
 from selenium.webdriver.common.by import By
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
@@ -30,7 +31,7 @@ def ExtractSixDigitNumber(text):
     match = re.search(r'\d{6}', text)
     if match:
         return match.group(0)
-    return None
+    return np.nan
 
 def CircleScraping(thread, behavior, startDay, finishDay, url):
     # Set the zone
@@ -186,8 +187,10 @@ def CircleScraping(thread, behavior, startDay, finishDay, url):
             try:
                 hotel_address = driver.find_element(By.XPATH, '//*[@id="showMap2"]/span[1]').text
             except:
+                hotel_address = ""
                 errors.append("<-> There is not address for this hotel.") 
             #Coordinates    
+            hotel_coordinates = ""
             try:
                 element = driver.find_element(By.XPATH, "//a[@data-atlas-latlng]")
                 hotel_coordinates = element.get_attribute("data-atlas-latlng")
@@ -229,8 +232,8 @@ def CircleScraping(thread, behavior, startDay, finishDay, url):
                 
             
             current_date = datetime.now()
-            address_parts = hotel_address.split(",")
             try:
+                address_parts = hotel_address.split(",")
                 neighborhood = address_parts[1].strip()
             except:
                 neighborhood = ""
@@ -244,7 +247,7 @@ def CircleScraping(thread, behavior, startDay, finishDay, url):
                 "neighborhood" : neighborhood,
                 "codigo_postal" : ExtractSixDigitNumber(hotel_address),
                 "hotel_puntuation" : hotel_puntuation.replace("Puntuación:", "").strip(),
-                "hotel_reviews" : ExtractNumber(hotel_reviews) if hotel_reviews else None,
+                "hotel_reviews" : ExtractNumber(hotel_reviews) if hotel_reviews else np.nan,
                 "services" : list(set(services)),
                 "staff" : categories['staff'],
                 "installations_services" : categories['installations_services'],
@@ -377,7 +380,7 @@ def CircleScraping(thread, behavior, startDay, finishDay, url):
     elif behavior == 3:
         SaveHotels(hotels_df)
         SaveBedrooms(bedrooms_df)
-        SaveBedroomsPrices(bedrooms_df[['date', 'future_date', 'title_hotel', 'title_room', 'price_room']])
+        SaveBedroomsPrices(bedrooms_df[['date', 'future_date', 'title_hotel', 'title_room', 'price_room', 'quantity_room']])
         #hotels_dummies_request()
         #bedrooms_dummies_request()
     driver.quit()
@@ -401,13 +404,13 @@ def start_threads(params):
 
 # Ejecutar segundo grupo de hilos después de que el primero haya terminado
 #CircleScraping(0,1,1,2)
-#CircleScraping(1, 3, 1, 2)
+CircleScraping(1, 3, 1, 2, 1)
 start_threads([
     (1, 3, 14, 15, 1),
     (2, 3, 14, 15, 2),
     (3, 3, 14, 15, 3),])
 
-while True:
+""" while True:
     try:
         start_threads([
             (1, 3, 3, 4, 1),
@@ -432,4 +435,4 @@ while True:
 
     except Exception as e:
         print(f"Ocurrió un error: {e}")
-        print("Reiniciando...")
+        print("Reiniciando...") """

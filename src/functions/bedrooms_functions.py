@@ -200,7 +200,7 @@ def GetPricesBedrooms(driver, title_hotel, future_date1):
                 "title_hotel" : title_hotel,
                 "title_room" : title_room,
                 "price_room" : ExtractNumber(price_room.replace(".", "")),
-                "quantity_room" : max_value
+                "quantity_room" : max_value if max_value is not None else 1
                 }
 
             bedroomsPrices_df.loc[len(bedroomsPrices_df)] = new_row
