@@ -35,7 +35,8 @@ def SaveBedrooms(bedrooms_df):
             'bedrooms',
             'living_rooms',
             'max_capacity_room',
-            'price_room'
+            'price_room',
+            'quantity_room'
         ]
         
         for col in columnas_a_float:
@@ -72,6 +73,7 @@ def SaveBedrooms(bedrooms_df):
             'price_room' : 'priceroom',
             'breakfast_room' : 'breakfastroom',
             'features_room' : 'featuresroom',
+            'quantity_room' : 'quantityroom',
         }
 
         # Renombrar las columnas del DataFrame según el mapeo
@@ -103,6 +105,77 @@ def SaveBedrooms(bedrooms_df):
         if connection:
             cursor.close()
             connection.close()
-        
+               
 def SaveBedroomsPrices(bedroomsPrices_df):
-    print(bedroomsPrices_df)
+    try:
+    # Conexión a la base de datos
+        connection = psycopg2.connect(
+            host=host,
+            database=database,
+            user=user,
+            password=password,
+            port=port
+        )
+        cursor = connection.cursor()
+
+        # Convertir los tipos de datos del DataFrame
+        columnas_a_float = [
+            'price_room',
+            'quantity_room'
+        ]
+        
+        for col in columnas_a_float:
+            # Asegurar que la columna sea de tipo 'object' antes de aplicar .str
+            bedroomsPrices_df[col] = bedroomsPrices_df[col].astype('str')  # Convertir a string para usar .str.replace()
+            bedroomsPrices_df[col] = bedroomsPrices_df[col].str.replace(',', '.') 
+            bedroomsPrices_df[col] = bedroomsPrices_df[col].replace({'': np.nan, 'None': np.nan, 'none': np.nan})
+            bedroomsPrices_df[col] = bedroomsPrices_df[col].astype(float) 
+
+        # Asegurar que todas las demás columnas que son 'object' o 'text' estén como strings
+        columnas_a_string = [
+            'date',
+            'future_date',
+            'title_hotel',
+            'title_room'
+        ]
+
+        bedroomsPrices_df[columnas_a_string] = bedroomsPrices_df[columnas_a_string].astype(str)
+        # Mapeo de nombres de columnas del DataFrame a las columnas de la base de datos
+        column_mapping = {
+            'date' : 'date',
+            'future_date' : 'futuredate',
+            'title_hotel' : 'hoteltitle',
+            'title_room' : 'roomtitle',
+            'price_room' : 'roomprice',
+            'quantity_room' : 'roomquantity'
+        }
+
+        # Renombrar las columnas del DataFrame según el mapeo
+        bedroomsPrices_df = bedroomsPrices_df.rename(columns=column_mapping)
+
+        # Convertir DataFrame en una lista de tuplas
+        values = [tuple(x) for x in bedroomsPrices_df.to_numpy()]
+
+        # Definir los nombres de las columnas en la tabla
+        columnas = ', '.join(column_mapping.values())
+
+        # Crear una consulta SQL para insertar los datos
+        insert_query = f"""
+        INSERT INTO prices ({columnas})
+        VALUES %s
+        """
+
+        # Usar psycopg2's `execute_values` para insertar eficientemente muchos registros
+        extras.execute_values(cursor, insert_query, values)
+        
+        # Confirmar los cambios
+        connection.commit()
+        print("Datos insertados exitosamente en la tabla 'prices'.")
+
+    except Exception as error:
+        print(f"Error al insertar datos en la base de datos, tabla 'prices': {error}")
+    finally:
+        # Cerrar conexión
+        if connection:
+            cursor.close()
+            connection.close()

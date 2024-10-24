@@ -380,7 +380,7 @@ def CircleScraping(thread, behavior, startDay, finishDay, url):
     elif behavior == 3:
         SaveHotels(hotels_df)
         SaveBedrooms(bedrooms_df)
-        SaveBedroomsPrices(bedrooms_df[['date', 'future_date', 'title_hotel', 'title_room', 'price_room', 'quantity_room']])
+        SaveBedroomsPrices(bedrooms_df[['date', 'future_date', 'title_hotel', 'title_room', 'price_room', 'quantity_room']].copy())
         #hotels_dummies_request()
         #bedrooms_dummies_request()
     driver.quit()

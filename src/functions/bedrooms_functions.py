@@ -21,6 +21,7 @@ def GetBedrooms(driver, title_hotel, future_date1):
     "living_rooms",
     "max_capacity_room",
     "price_room",
+    "quantity_room",
     "breakfast_room",
     "features_room",
     ]
@@ -114,6 +115,16 @@ def GetBedrooms(driver, title_hotel, future_date1):
                 
             max_capacity_room = tr.find_element(By.XPATH, ".//span[contains(text(), 'personas')]").text
             price_room =tr.find_element(By.XPATH, ".//span[contains(text(), 'COP')]").text
+
+            try:
+                select_element = tr.find_element(By.TAG_NAME, 'select')
+                select = Select(select_element)
+
+                max_value = max([int(option.get_attribute('value')) for option in select.options])
+                select.select_by_value(str(max_value))
+            except:
+                print("Error in quantity room")
+
             try:
                 breakfast_room =  tr.find_element(By.XPATH, ".//span[contains(text(), 'Desayuno')]").text
             except Exception  as e:
@@ -144,6 +155,7 @@ def GetBedrooms(driver, title_hotel, future_date1):
                 "price_room" : ExtractNumber(price_room.replace(".", "")),
                 "breakfast_room" : breakfast_room,
                 "features_room" : features_room,
+                "quantity_room" : max_value if max_value is not None else 1,
                 }
 
             bedrooms_df.loc[len(bedrooms_df)] = new_row
