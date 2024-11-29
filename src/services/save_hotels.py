@@ -4,7 +4,7 @@ import pandas as pd
 from psycopg2 import extras
 
 # Datos de conexión
-host = '34.71.211.75'
+host = '35.226.65.128'
 database = 'lokl'
 user = 'postgres'
 password = 'LOKL2025**'

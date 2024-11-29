@@ -50,6 +50,19 @@ def CircleScraping(thread, behavior, startDay, finishDay, url):
     elif (url == 3):
         #Guatape
         driver.get(f'https://www.booking.com/searchresults.es.html?ss=Guatapé&ssne=Guatapé&ssne_untouched=Guatapé&efdco=1&label=guatape-ZG62mnR7d8txayaxVvMoMQS379602288477%3Apl%3Ata%3Ap1%3Ap2%3Aac%3Aap%3Aneg%3Afi%3Atikwd-377345041594%3Alp1003654%3Ali%3Adec%3Adm%3Appccp%3DUmFuZG9tSVYkc2RlIyh9YfpWGnRw6lOGZNq08ntPlxk&aid=1610688&lang=es&sb=1&src_elem=sb&src=city&dest_id=-585862&dest_type=city&checkin={future_date1.year}-{future_date1.month}-{future_date1.day}&checkout={future_date2.year}-{future_date2.month}-{future_date2.day}&group_adults=2&no_rooms=1&group_children=0&sb_travel_purpose=leisure&sb_lp=1')
+    elif (url == 4):
+        #Sabaneta
+        driver.get(f'https://www.booking.com/searchresults.es.html?ss=Sabaneta&ssne=Sabaneta&ssne_untouched=Sabaneta&efdco=1&label=sabaneta-uQ2yoE13Y30tQEaFmUooTAS379673028914%3Apl%3Ata%3Ap1%3Ap2%3Aac%3Aap%3Aneg%3Afi%3Atikwd-379711174456%3Alp9199111%3Ali%3Adec%3Adm%3Appccp%3DUmFuZG9tSVYkc2RlIyh9YfpWGnRw6lOGZNq08ntPlxk&aid=1610688&lang=es&sb=1&src_elem=sb&src=city&dest_id=-596855&dest_type=city&checkin={future_date1.year}-{future_date1.month}-{future_date1.day}&checkout={future_date2.year}-{future_date2.month}-{future_date2.day}&group_adults=2&no_rooms=1&group_children=0&sb_travel_purpose=leisure&sb_lp=1')
+    elif (url == 5):
+        #Itagui
+        driver.get(f'https://www.booking.com/searchresults.es.html?ss=Itagüí%2C+Antioquia%2C+Colombia&ssne=Sabaneta&ssne_untouched=Sabaneta&label=sabaneta-uQ2yoE13Y30tQEaFmUooTAS379673028914%3Apl%3Ata%3Ap1%3Ap2%3Aac%3Aap%3Aneg%3Afi%3Atikwd-379711174456%3Alp9199111%3Ali%3Adec%3Adm%3Appccp%3DUmFuZG9tSVYkc2RlIyh9YfpWGnRw6lOGZNq08ntPlxk&aid=1610688&lang=es&sb=1&src_elem=sb&src=searchresults&dest_id=-586792&dest_type=city&ac_position=2&ac_click_type=b&ac_langcode=es&ac_suggestion_list_length=5&search_selected=true&search_pageview_id=ce3971d8f56a0724&ac_meta=GhBjZTM5NzFkOGY1NmEwNzI0IAIoATICZXM6A2l0YUAASgBQAA%3D%3D&checkin={future_date1.year}-{future_date1.month}-{future_date1.day}&checkout={future_date2.year}-{future_date2.month}-{future_date2.day}&group_adults=2&no_rooms=1&group_children=0')
+    elif (url == 6):
+        #Envigado
+        driver.get(f'https://www.booking.com/searchresults.es.html?ss=envigado&ssne=Itagüí&ssne_untouched=Itagüí&label=sabaneta-uQ2yoE13Y30tQEaFmUooTAS379673028914%3Apl%3Ata%3Ap1%3Ap2%3Aac%3Aap%3Aneg%3Afi%3Atikwd-379711174456%3Alp9199111%3Ali%3Adec%3Adm%3Appccp%3DUmFuZG9tSVYkc2RlIyh9YfpWGnRw6lOGZNq08ntPlxk&aid=1610688&lang=es&sb=1&src_elem=sb&src=searchresults&checkin={future_date1.year}-{future_date1.month}-{future_date1.day}&checkout={future_date2.year}-{future_date2.month}-{future_date2.day}&group_adults=2&no_rooms=1&group_children=0')
+    elif (url == 7):
+        #La estrella
+        driver.get(f'https://www.booking.com/searchresults.es.html?ss=La+Estrella%2C+Antioquia%2C+Colombia&ssne=Envigado&ssne_untouched=Envigado&label=sabaneta-uQ2yoE13Y30tQEaFmUooTAS379673028914%3Apl%3Ata%3Ap1%3Ap2%3Aac%3Aap%3Aneg%3Afi%3Atikwd-379711174456%3Alp9199111%3Ali%3Adec%3Adm%3Appccp%3DUmFuZG9tSVYkc2RlIyh9YfpWGnRw6lOGZNq08ntPlxk&aid=1610688&lang=es&sb=1&src_elem=sb&src=searchresults&dest_id=-588189&dest_type=city&ac_position=0&ac_click_type=b&ac_langcode=es&ac_suggestion_list_length=5&search_selected=true&search_pageview_id=5cb7724ee06d0092&ac_meta=GhA1Y2I3NzI0ZWUwNmQwMDkyIAAoATICZXM6BWxhIGVzQABKAFAA&checkin={future_date1.year}-{future_date1.month}-{future_date1.day}&checkout={future_date2.year}-{future_date2.month}-{future_date2.day}&group_adults=2&no_rooms=1&group_children=0')
+
 
     # Button validation
     try:
@@ -420,7 +433,7 @@ while True:
             (5, 3, 29, 30, 2),
             (6, 3, 29, 30, 3)
         ])
-        for i in range(3):
+        for i in range(7):
             x = 0
             for j in range(6):
                 start_threads([
